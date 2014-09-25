@@ -1,0 +1,27 @@
+
+-----
+ag_train -t ../../Evaluate/Fold2/train -v ../../Evaluate/Fold2/test -r ../../attrAG 
+
+Reading attribute file: "../../attrAG"
+4 attributes
+4 active attributes
+
+Reading train set: "../../Evaluate/Fold2/train"
+2915 points in the train set, std. dev. of y values = 0.490787
+
+Reading validation set: "../../Evaluate/Fold2/test"
+807 points in the validation set, std. dev. of y values = 0.486975
+
+Alpha = 0.01
+N = 6
+60 bagging iterations
+fast mode
+
+Best model:
+	Alpha = 0.5
+	N = 3
+RMSE on validation set = 0.487701
+
+You can save the best model for the further use. 
+Suggested action: ag_save -a 0.5 -n 3
+

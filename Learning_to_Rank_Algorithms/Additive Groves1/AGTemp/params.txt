@@ -1,0 +1,9 @@
+1
+../../Evaluate/Fold2/train
+../../Evaluate/Fold2/test
+../../attrAG
+0.01
+6
+60
+fast
+rms

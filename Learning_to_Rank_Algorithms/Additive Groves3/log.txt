@@ -1,0 +1,13 @@
+
+-----
+ag_predict -p ../../Evaluate/Small/Fold3/testAG -r ../../attrAG -m ../../Evaluate/Small/Fold3/rank/model.bin -o ../../Evaluate/Small/Fold3/rank/prediction 
+
+Reading attribute file: "../../attrAG"
+4 attributes
+4 active attributes
+
+Reading test set: "../../Evaluate/Small/Fold3/testAG"
+332 points in the test set, std. dev. of y values = 0.499964
+
+
+RMSE: 0.47356

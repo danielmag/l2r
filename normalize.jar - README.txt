@@ -1,0 +1,33 @@
+NORMALIZE.JAR
+##########################################################
+
+normalize.jar performs the following operations:
+	1. normalizes each feature between 0 and 1;
+	2. discards conflicting vectors (i.e. vectors which have similar features, but belong to opposite classes);
+	3. removes null vectors
+	
+Usage example:
+
+	java -jar normalize.jar <path> -c [true/false] -n [true/false] -z [true/false]
+	
+To run the examples that I sent you, do the following.
+
+If you just want to normalize the vectors, do the following:
+
+	cd examples
+	java -jar normalize.jar ./experts/ -n true -c false -z false
+
+If you just want to remove conflicting vectors, do the following:
+
+	cd examples
+	java -jar normalize.jar ./experts/ -c true -n false -z false
+	
+If you just want to remove null vectors, do the following:
+
+	cd examples
+	java -jar normalize.jar ./experts/ -z true -c false -n false
+
+To run all functionalities:
+
+	cd examples
+	java -jar normalize.jar ./experts/ -z true -c true -n true
