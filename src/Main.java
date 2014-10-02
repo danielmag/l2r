@@ -86,7 +86,7 @@ public class Main
             BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = null;
 
-            String metric = "P1 = ";  // MAP =
+            String metric = "MAP = ";  // MAP =
 
             while((line=input.readLine()) != null){
 
