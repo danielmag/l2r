@@ -26,8 +26,7 @@ public class Main
         if (kernel.equals("LINEAR")) {
             C += 0.1D;
         }
-        if (kernel.equals("NONLINEAR"))
-        {
+        if (kernel.equals("NONLINEAR")) {
             double exponent = Math.log(C) / Math.log(2.0D);
 
 
