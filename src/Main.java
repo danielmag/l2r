@@ -65,7 +65,7 @@ public class Main
             (new File("./" + path + "/Fold" + i + "/model_final.bin")).delete();
             while(!model.renameTo(new File("./" + path + "/Fold" + i + "/model_final.bin"))) {
                 //throw new RuntimeException("Could not rename model.bin");
-                System.out.println("CICLO!");
+                System.out.println("ciclo");
             }
         }
     }
@@ -163,163 +163,185 @@ public class Main
         return exitVal;
     }
 
-    public void runCoordAscent(String type, int totalRR, int totalIterations)
-    {
-        this.algorithm = "coordinateAscent";
-        for (int randomRestart = 1; randomRestart <= totalRR; randomRestart++) {
-            for (int iteration = 1; iteration <= totalIterations; iteration++)
-            {
-                this.paramIteration = iteration;
-                this.paramRandomRestart = randomRestart;
-
+    public void runCoordAscent(String type, int totalRR, int totalIterations){
+        
+        algorithm = "coordinateAscent";
+        
+        for(int randomRestart = 1; randomRestart <= totalRR; randomRestart++){
+            for(int iteration = 1; iteration <= totalIterations; iteration++){
+                
+                paramIteration = iteration;
+                paramRandomRestart = randomRestart;
+                
                 System.out.println("\n###################################################");
                 System.out.println("The number of iterations is currently " + iteration);
                 System.out.println("###################################################\n");
-                for (int fold = 1; fold <= 4; fold++)
-                {
-                    String trainFilePath = "./" + type + "/Fold" + fold + "/train";
-                    String testFilePath = "./" + type + "/Fold" + fold + "/test";
-                    String modelFilePath = "./" + type + "/Fold" + fold + "/model.bin";
-                    String predictionFile = "./" + type + "/Fold" + fold + "/prediction";
+                
+                for(int fold = 1; fold <= 4; fold++){
+                
+                    String trainFilePath = "./"+type+"/Fold"+fold+"/train";
+                    String testFilePath = "./"+type+"/Fold"+fold+"/test";
+                    String modelFilePath = "./"+type+"/Fold"+fold+"/model.bin";
+                    String predictionFile = "./"+type+"/Fold"+fold+"/prediction";
                     String rankBoost = "./Learning_to_Rank_Algorithms/RankLib.jar -ranker 4";
-
-
-                    System.out.println("java -jar " + rankBoost + " -train " + trainFilePath + " -validate " + testFilePath + " -i " + iteration + " -r " + randomRestart + " -save " + modelFilePath);
-                    executeCommand("java -jar " + rankBoost + " -train " + trainFilePath + " -validate " + testFilePath + " -i " + iteration + " -r " + randomRestart + " -save " + modelFilePath, "");
-
-
-                    executeCommand("java -jar " + rankBoost + " -rank " + testFilePath + " -load " + modelFilePath + " -results " + predictionFile, "");
+                    
+                    //start learning process
+                    System.out.println("java -jar " + rankBoost + " -train " + trainFilePath + " -metric2t MAP " + " -test " + testFilePath + " -metric2T MAP " + " -i " + iteration + " -r " + randomRestart + " -save " + modelFilePath);
+                    executeCommand("java -jar " + rankBoost + " -train " + trainFilePath + " -metric2t MAP " + " -test " + testFilePath + " -metric2T MAP " + " -i " + iteration + " -r " + randomRestart  + " -save " + modelFilePath, "");
+                    
+                    //starting classification process
+                    executeCommand("java -jar " + rankBoost + " -rank " + testFilePath + " -metric2T MAP " + " -load " + modelFilePath +" -results " + predictionFile, "");
                 }
+                
+                //evaluate folds
                 executeCommand("java -jar generate-treceval-files.jar " + type, type);
             }
         }
         deleteGeneratedFiles(type);
     }
 
-    public void runCoordAscent(String type, int totalRR, int totalIterations, String features)
-    {
-        this.algorithm = "coordinateAscent";
-        for (int randomRestart = 1; randomRestart <= totalRR; randomRestart++) {
-            for (int iteration = 1; iteration <= totalIterations; iteration++)
-            {
-                this.paramIteration = iteration;
-                this.paramRandomRestart = randomRestart;
-
+    public void runCoordAscent(String type, int totalRR, int totalIterations, String features){
+        
+        algorithm = "coordinateAscent";
+        
+        for(int randomRestart = 1; randomRestart <= totalRR; randomRestart++){
+            for(int iteration = 1; iteration <= totalIterations; iteration++){
+                
+                paramIteration = iteration;
+                paramRandomRestart = randomRestart;
+                
                 System.out.println("\n###################################################");
                 System.out.println("The number of iterations is currently " + iteration);
                 System.out.println("###################################################\n");
-                for (int fold = 1; fold <= 4; fold++)
-                {
-                    String trainFilePath = "./" + type + "/Fold" + fold + "/train";
-                    String testFilePath = "./" + type + "/Fold" + fold + "/test";
-                    String modelFilePath = "./" + type + "/Fold" + fold + "/model.bin";
-                    String predictionFile = "./" + type + "/Fold" + fold + "/prediction";
+                
+                for(int fold = 1; fold <= 4; fold++){
+                
+                    String trainFilePath = "./"+type+"/Fold"+fold+"/train";
+                    String testFilePath = "./"+type+"/Fold"+fold+"/test";
+                    String modelFilePath = "./"+type+"/Fold"+fold+"/model.bin";
+                    String predictionFile = "./"+type+"/Fold"+fold+"/prediction";
                     String rankBoost = "./Learning_to_Rank_Algorithms/RankLib.jar -ranker 4";
-
-
-                    System.out.println("java -jar " + rankBoost + " -train " + trainFilePath + " -validate " + testFilePath + " -feature " + features + " -i " + iteration + " -r " + randomRestart + " -save " + modelFilePath);
-                    executeCommand("java -jar " + rankBoost + " -train " + trainFilePath + " -validate " + testFilePath + " -feature " + features + " -i " + iteration + " -r " + randomRestart + " -save " + modelFilePath, "");
-
-
-                    executeCommand("java -jar " + rankBoost + " -rank " + testFilePath + " -load " + modelFilePath + " -feature " + features + " -results " + predictionFile, "");
+                    
+                    //start learning process
+                    System.out.println("java -jar " + rankBoost + " -train " + trainFilePath + " -metric2t MAP " + " -test " + testFilePath + " -metric2T MAP " + " -feature " + features + " -i " + iteration + " -r " + randomRestart + " -save " + modelFilePath);
+                    executeCommand("java -jar " + rankBoost + " -train " + trainFilePath + " -metric2t MAP " + " -test " + testFilePath + " -metric2T MAP " + " -feature " + features + " -i " + iteration + " -r " + randomRestart  + " -save " + modelFilePath, "");
+                    
+                    //starting classification process
+                    executeCommand("java -jar " + rankBoost + " -rank " + testFilePath + " -metric2T MAP " + " -load " + modelFilePath + " -feature " + features + " -results " + predictionFile, "");
                 }
+                
+                //evaluate folds
                 executeCommand("java -jar generate-treceval-files.jar " + type, type);
             }
         }
         deleteGeneratedFiles(type);
     }
 
-    public void runRankBoost(String type, int totalRounds, int totalCandidates)
-    {
-        this.algorithm = "RankBoost";
-        for (int round = 1; round <= totalRounds; round++) {
-            for (int tc = 1; tc <= totalCandidates; tc++)
-            {
-                this.paramRounds = round;
-                this.paramTc = tc;
-
+    public void runRankBoost(String type, int totalRounds, int totalCandidates){
+        
+        algorithm = "RankBoost";
+        
+        for(int round = 1; round <= totalRounds; round++){
+            for(int tc = 1; tc <= totalCandidates; tc++){
+                
+                paramRounds = round;
+                paramTc = tc;
+                
                 System.out.println("\n###################################################");
                 System.out.println("The number of iterations is currently " + round);
                 System.out.println("###################################################\n");
-                for (int fold = 1; fold <= 4; fold++)
-                {
-                    String trainFilePath = "./" + type + "/Fold" + fold + "/train";
-                    String testFilePath = "./" + type + "/Fold" + fold + "/test";
-                    String modelFilePath = "./" + type + "/Fold" + fold + "/model.bin";
-                    String predictionFile = "./" + type + "/Fold" + fold + "/prediction";
+                
+                for(int fold = 1; fold <= 4; fold++){
+                
+                    String trainFilePath = "./"+type+"/Fold"+fold+"/train";
+                    String testFilePath = "./"+type+"/Fold"+fold+"/test";
+                    String modelFilePath = "./"+type+"/Fold"+fold+"/model.bin";
+                    String predictionFile = "./"+type+"/Fold"+fold+"/prediction";
                     String rankBoost = "./Learning_to_Rank_Algorithms/RankLib.jar -ranker 2";
-
-
-                    System.out.println("java -jar " + rankBoost + " -train " + trainFilePath + " -validate " + testFilePath + " -round " + round + " -tc " + tc + " -save " + modelFilePath);
-                    executeCommand("java -jar " + rankBoost + " -train " + trainFilePath + " -validate " + testFilePath + " -round " + round + " -tc " + tc + " -save " + modelFilePath, "");
-
-
-                    executeCommand("java -jar " + rankBoost + " -rank " + testFilePath + " -load " + modelFilePath + " -results " + predictionFile, "");
+                    
+                    //start learning process
+                    System.out.println("java -jar " + rankBoost + " -train " + trainFilePath + " -metric2t MAP " + " -test " + testFilePath + " -metric2T MAP " + " -round " + round + " -tc " + tc + " -save " + modelFilePath);
+                    executeCommand("java -jar " + rankBoost + " -train " + trainFilePath + " -metric2t MAP " + " -test " + testFilePath + " -metric2T MAP " + " -round " + round + " -tc " + tc + " -save " + modelFilePath, "");
+                    
+                    //starting classification process
+                    executeCommand("java -jar " + rankBoost + " -rank " + testFilePath + " -metric2T MAP " + " -load " + modelFilePath +" -results " + predictionFile, "");
                 }
+                
+                //evaluate folds
                 executeCommand("java -jar generate-treceval-files.jar " + type, type);
             }
         }
         deleteGeneratedFiles(type);
     }
 
-    public void runAdaRank(String type, int totalRounds)
-    {
-        this.algorithm = "AdaRank";
-        for (int round = 1; round <= totalRounds; round++)
-        {
-            this.paramRounds = round;
-
+    public void runAdaRank(String type, int totalRounds){
+        
+        algorithm = "AdaRank";
+        
+        for(int round = 1; round <= totalRounds; round++){
+            
+            paramRounds = round;
+            
             System.out.println("\n###################################################");
             System.out.println("The number of iterations is currently " + round);
             System.out.println("###################################################\n");
-            for (int fold = 1; fold <= 4; fold++)
-            {
-                String trainFilePath = type + "Fold" + fold + "/train";
-                String testFilePath = type + "Fold" + fold + "/test";
-                String modelFilePath = type + "Fold" + fold + "/model.bin";
-                String predictionFile = type + "Fold" + fold + "/prediction";
+            
+            for(int fold = 1; fold <= 4; fold++){
+            
+                String trainFilePath = "./"+type+"/Fold"+fold+"/train";
+                String testFilePath = "./"+type+"/Fold"+fold+"/test";
+                String modelFilePath = "./"+type+"/Fold"+fold+"/model.bin";
+                String predictionFile = "./"+type+"/Fold"+fold+"/prediction";
                 String adaRank = "./Learning_to_Rank_Algorithms/RankLib.jar -ranker 3";
-
-
-                System.out.println("java -jar " + adaRank + " -train " + trainFilePath + " -validate " + testFilePath + " -round " + round + " -save " + modelFilePath);
-                executeCommand("java -jar " + adaRank + " -train " + trainFilePath + " -validate " + testFilePath + " -round " + round + " -save " + modelFilePath, "");
-
-
-                executeCommand("java -jar " + adaRank + " -rank " + testFilePath + " -load " + modelFilePath + " -results " + predictionFile, "");
+                
+                //start learning process
+                System.out.println("java -jar " + adaRank + " -train " + trainFilePath + " -metric2t MAP " + " -test " + testFilePath + " -metric2T MAP " + " -round " + round + " -save " + modelFilePath);
+                executeCommand("java -jar " + adaRank + " -train " + trainFilePath + " -metric2t MAP " + " -test " + testFilePath + " -metric2T MAP " + " -round " + round + " -save " + modelFilePath, "");
+                
+                //starting classification process
+                executeCommand("java -jar " + adaRank + " -rank " + testFilePath + " -metric2T MAP " + " -load " + modelFilePath +" -results " + predictionFile, "");
             }
+            
+            //evaluate folds
             executeCommand("java -jar generate-treceval-files.jar " + type, type);
+            
         }
         deleteGeneratedFiles(type);
     }
 
-    public void runRankNet(String type, int totalEpochs, int totalNodes)
-    {
+    public void runRankNet(String type, int totalEpochs, int totalNodes){
+        
         int nodes = 0;
-        this.algorithm = "RankNet";
-        for (int epochs = 1; epochs <= totalEpochs; epochs++) {
-            for (nodes = 1; nodes <= totalNodes; nodes++)
-            {
-                this.paramEpochs = epochs;
-                this.paramNodes = nodes;
-
+        algorithm = "RankNet";
+        
+        for(int epochs = 1; epochs <= totalEpochs; epochs++){
+        
+            for( nodes = 1; nodes <= totalNodes; nodes++){
+            
+                paramEpochs = epochs;
+                paramNodes = nodes;
+                
                 System.out.println("\n###################################################");
                 System.out.println("The number of nodes is currently " + nodes);
                 System.out.println("###################################################\n");
-                for (int fold = 1; fold <= 4; fold++)
-                {
-                    String trainFilePath = "./" + type + "/Fold" + fold + "/train";
-                    String testFilePath = "./" + type + "/Fold" + fold + "/test";
-                    String modelFilePath = "./" + type + "/Fold" + fold + "/model.bin";
-                    String predictionFile = "./" + type + "/Fold" + fold + "/prediction";
+                
+                for(int fold = 1; fold <= 4; fold++){
+                
+                    String trainFilePath = "./"+type+"/Fold"+fold+"/train";
+                    String testFilePath = "./"+type+"/Fold"+fold+"/test";
+                    String modelFilePath = "./"+type+"/Fold"+fold+"/model.bin";
+                    String predictionFile = "./"+type+"/Fold"+fold+"/prediction";
                     String rankNet = "./Learning_to_Rank_Algorithms/RankLib.jar -ranker 1";
-
-
-                    System.out.println("java -jar " + rankNet + " -train " + trainFilePath + " -validate " + testFilePath + " -node " + nodes + "-epoch " + epochs + " -save " + modelFilePath);
-                    executeCommand("java -jar " + rankNet + " -train " + trainFilePath + " -validate " + testFilePath + " -node " + nodes + " -epoch " + epochs + " -save " + modelFilePath, "");
-
-
-                    executeCommand("java -jar " + rankNet + " -rank " + testFilePath + " -load " + modelFilePath + " -results " + predictionFile, "");
+                    
+                    //start learning process
+                    System.out.println("java -jar " + rankNet + " -train " + trainFilePath + " -metric2t MAP " + " -test " + testFilePath + " -metric2T MAP " + " -node " + nodes + " -epoch " +epochs + " -save " + modelFilePath);
+                    executeCommand("java -jar " + rankNet + " -train " + trainFilePath + " -metric2t MAP " + " -test " + testFilePath + " -metric2T MAP " + " -node " + nodes + " -epoch " +epochs + " -save " + modelFilePath, "");
+                    
+                    //starting classification process
+                    executeCommand("java -jar " + rankNet + " -rank " + testFilePath + " -metric2T MAP " + " -load " + modelFilePath +" -results " + predictionFile, "");
                 }
+                
+                //evaluate folds
                 executeCommand("java -jar generate-treceval-files.jar " + type, type);
             }
         }
