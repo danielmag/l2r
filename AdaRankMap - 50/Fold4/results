@@ -26,7 +26,7 @@ P1000            20 0.0030
 num_ret          21 2
 num_rel          21 0
 num_rel_ret      21 0
-map              21    NaN
+map              21 0.0000
 ndcg             21    NaN
 ndcg5            21    NaN
 ndcg10           21    NaN
@@ -101,7 +101,7 @@ P1000            23 0.0030
 num_ret          24 3
 num_rel          24 0
 num_rel_ret      24 0
-map              24    NaN
+map              24 0.0000
 ndcg             24    NaN
 ndcg5            24    NaN
 ndcg10           24    NaN
@@ -151,7 +151,7 @@ P1000            25 0.0020
 num_ret          26 3
 num_rel          26 0
 num_rel_ret      26 0
-map              26    NaN
+map              26 0.0000
 ndcg             26    NaN
 ndcg5            26    NaN
 ndcg10           26    NaN
@@ -251,7 +251,7 @@ P1000            29 0.0020
 num_ret         all 26
 num_rel         all 18
 num_rel_ret     all 18
-map             all    NaN
+map             all 0.7000
 ndcg            all    NaN
 ndcg5           all    NaN
 ndcg10          all    NaN
